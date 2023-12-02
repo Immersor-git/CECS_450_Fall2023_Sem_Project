@@ -1,7 +1,8 @@
 library(ggplot2)
 library(dplyr)
 # School Name,School Type,Starting Median Salary,starting-Career Median Salary,starting-Career 10th Percentile Salary,starting-Career 25th Percentile Salary,starting-Career 75th Percentile Salary,starting-Career 90th Percentile Salary
-data <- read.csv("salariescollegetype.csv", header = FALSE, sep = ";")
+file_path <- ("/Users/sarahsantos/CECS_450_Fall2023_Sem_Project/SalaryByCollegeType_Code/salariescollegetype.csv")
+data <- read.csv(file_path, header = FALSE, sep = ";")
 #subdata <- subset(data, V1 >= 1 & V1 <= 50)
 
 

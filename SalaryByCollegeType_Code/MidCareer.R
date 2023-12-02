@@ -1,7 +1,13 @@
 library(ggplot2)
 library(dplyr)
 # School Name,School Type,Starting Median Salary,Mid-Career Median Salary,Mid-Career 10th Percentile Salary,Mid-Career 25th Percentile Salary,Mid-Career 75th Percentile Salary,Mid-Career 90th Percentile Salary
-data <- read.csv("salariescollegetype.csv", header = FALSE, sep = ";")
+# Get the current working directory
+current_directory <- getwd()
+
+# Print the current working directory
+print(current_directory)
+file_path <- ("/Users/sarahsantos/CECS_450_Fall2023_Sem_Project/SalaryByCollegeType_Code/salariescollegetype.csv")
+data <- read.csv(file_path, header = FALSE, sep = ";")
 
 
 # convert salary to computable numbers
@@ -15,7 +21,7 @@ data$V4[is.na(data$V4) | !is.finite(data$V4)] <- NA  # Set invalid entries to NA
 # engineer mean for mid career
 eng_total <- 0
 column_name <- "V2"
-target_value <- ",Engineering "
+target_value <- ",Engineering"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -24,19 +30,55 @@ matching_rows <- which(data[[column_name]] == target_value)
 eng_count <- length(matching_rows)
 print(eng_count)
 
+college_mid_salary <- integer()
+college_list <- integer()
+
 # add total mid-career salaries
 for (row in matching_rows) {
   salary <- data[row, "V4"]
+  eng_colleges <- data[row, "V1"]
+  college_mid_salary <- c(college_mid_salary, salary)
+  college_list <- c(college_list, eng_colleges)
   eng_total <- eng_total + salary
 }
 mean_eng_wage <- eng_total / eng_count
 print(mean_eng_wage)
+print(college_mid_salary)
+print(college_list)
+
+# mid career salary by engineering colleges
+data_mid_career <- data.frame(
+  college = college_list,
+  salary = college_mid_salary
+  #color = c("blue", "orange", "red", "purple","darkgreen")
+) 
+
+ggplot(data_mid_career, aes(x = college, y = salary)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Salaries by College", x = "College", y = "Salary") +
+  scale_fill_gradient(low = "blue", high = "red") +
+  scale_y_continuous(limits = c(0, 150000), breaks = seq(0, 150000, by = 20000)) +
+  guides(fill = guide_colorbar(title = "Salary")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 5)) 
+
+  
+
+ggplot(data_mid_career, aes(x = college, y=salary, fill = college)) +
+  geom_bar(stat = "identity", width = 0.6, position = "dodge") +
+  scale_y_continuous(limits = c(0, 100000), breaks = seq(0, 100000, by = 20000)) +
+  theme(axis.text.x = element_text(size = 8), 
+        axis.text.y = element_text(size = 10))#,
+        #legend.key.size = unit(0.3, "cm")) +
+  #labs(title = "Mid-Career Median Salary by School Type", x = "College Type", y = "Salary") +
+  #scale_fill_manual(values = c("blue", "darkgreen","red","purple", "orange"),
+                    #labels = c("Engineering", "State", "Liberal Arts", "Party", "Ivy League"))
 
 
 # liberal arts mean for mid career
 lib_total <- 0
 column_name <- "V2"
-target_value <- ",Liberal Arts "
+target_value <- ",Liberal Arts"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -57,7 +99,7 @@ print(mean_lib_wage)
 # party mean for mid career
 party_total <- 0
 column_name <- "V2"
-target_value <- ",Party "
+target_value <- ",Party"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -78,7 +120,7 @@ print(mean_party_wage)
 # party mean for mid career
 party_total <- 0
 column_name <- "V2"
-target_value <- ",Party "
+target_value <- ",Party"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -99,7 +141,7 @@ print(mean_party_wage)
 # state mean for mid career
 state_total <- 0
 column_name <- "V2"
-target_value <- ",State "
+target_value <- ",State"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -120,7 +162,7 @@ print(mean_state_wage)
 # ivy league mean for mid career
 ivy_total <- 0
 column_name <- "V2"
-target_value <- ",Ivy League "
+target_value <- ",Ivy League"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -199,6 +241,5 @@ ggplot(data, aes(x = V2, y=V3)) +
     y = "Starting Median Salary"
   )
 
-'''
 
 
