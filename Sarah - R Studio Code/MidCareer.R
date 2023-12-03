@@ -6,7 +6,7 @@ current_directory <- getwd()
 
 # Print the current working directory
 print(current_directory)
-file_path <- ("/Users/sarahsantos/CECS_450_Fall2023_Sem_Project/SalaryByCollegeType_Code/salariescollegetype.csv")
+file_path <- ("/Users/sarahsantos/CECS_450_Fall2023_Sem_Project/Sarah - R Studio Code/salariescollegetype.csv")
 data <- read.csv(file_path, header = FALSE, sep = ";")
 
 
@@ -136,17 +136,47 @@ target_value <- ",State"
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
 
-# count of state colleges
+# count of engineering colleges
 state_count <- length(matching_rows)
 print(state_count)
+
+college_mid_salary <- integer()
+college_list <- integer()
 
 # add total mid-career salaries
 for (row in matching_rows) {
   salary <- data[row, "V4"]
+  state_colleges <- data[row, "V1"]
+  college_mid_salary <- c(college_mid_salary, salary)
+  college_list <- c(college_list, state_colleges)
   state_total <- state_total + salary
 }
 mean_state_wage <- state_total / state_count
+college_list_ordered <- college_list[order(college_list)]
 print(mean_state_wage)
+print(college_mid_salary)
+print(college_list)
+
+# mid career salary by engineering colleges
+data_mid_career <- data.frame(
+  college = college_list_ordered,
+  salary = college_mid_salary,
+  color = rep(c("darkgreen", "lightgreen"), length.out = length(college_list_ordered))
+) 
+
+ggplot(data_mid_career, aes(x = college, y = salary, fill = color)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mid-Career Salaries by State Colleges", x = "College Name", y = "Salary", fill = "") +
+  scale_y_continuous(limits = c(0, 120000), breaks = seq(0, 120000, by = 20000)) +
+  theme_minimal() +
+  scale_fill_manual(values = c("darkgreen", "lightgreen"), 
+                    labels = c("Salary")) + 
+  theme(axis.text.x = element_text(angle = 270, hjust = 0, size = 6),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        plot.title = element_text(size = 20),
+        legend.position = "none")
 
 
 # ivy league mean for mid career
