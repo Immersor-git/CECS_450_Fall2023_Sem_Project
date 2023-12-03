@@ -42,38 +42,28 @@ for (row in matching_rows) {
   eng_total <- eng_total + salary
 }
 mean_eng_wage <- eng_total / eng_count
+college_list_ordered <- college_list[order(college_list)]
 print(mean_eng_wage)
 print(college_mid_salary)
 print(college_list)
 
 # mid career salary by engineering colleges
 data_mid_career <- data.frame(
-  college = college_list,
-  salary = college_mid_salary
-  #color = c("blue", "orange", "red", "purple","darkgreen")
+  college = college_list_ordered,
+  salary = college_mid_salary,
+  color = rep(c("darkgreen", "lightgreen"), length.out = length(college_list_ordered))
 ) 
 
-ggplot(data_mid_career, aes(x = college, y = salary)) +
+ggplot(data_mid_career, aes(x = college, y = salary, fill = color)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Salaries by College", x = "College", y = "Salary") +
-  scale_fill_gradient(low = "blue", high = "red") +
+  labs(title = "Mid-Career Salaries by Engineering Colleges", x = "College Name", y = "Salary", fill = "") +
   scale_y_continuous(limits = c(0, 150000), breaks = seq(0, 150000, by = 20000)) +
-  guides(fill = guide_colorbar(title = "Salary")) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 5)) 
-
+  scale_fill_manual(values = c("darkgreen", "lightgreen"), 
+                    labels = c("Salary")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 5),
+        legend.position = "none")
   
-
-ggplot(data_mid_career, aes(x = college, y=salary, fill = college)) +
-  geom_bar(stat = "identity", width = 0.6, position = "dodge") +
-  scale_y_continuous(limits = c(0, 100000), breaks = seq(0, 100000, by = 20000)) +
-  theme(axis.text.x = element_text(size = 8), 
-        axis.text.y = element_text(size = 10))#,
-        #legend.key.size = unit(0.3, "cm")) +
-  #labs(title = "Mid-Career Median Salary by School Type", x = "College Type", y = "Salary") +
-  #scale_fill_manual(values = c("blue", "darkgreen","red","purple", "orange"),
-                    #labels = c("Engineering", "State", "Liberal Arts", "Party", "Ivy League"))
-
 
 # liberal arts mean for mid career
 lib_total <- 0

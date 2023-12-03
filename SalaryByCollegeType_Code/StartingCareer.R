@@ -18,10 +18,9 @@ str(data$V3)
 data$V3 <- as.numeric(as.character(data$V3))
 data$V3[is.na(data$V3) | !is.finite(data$V3)] <- NA  # Set invalid entries to NA
 
-# engineer mean for starting career
 eng_total <- 0
 column_name <- "V2"
-target_value <- ",Engineering "
+target_value <- ",Engineering"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -30,13 +29,41 @@ matching_rows <- which(data[[column_name]] == target_value)
 eng_count <- length(matching_rows)
 print(eng_count)
 
-# add total starting-career salaries
+college_start_salary <- integer()
+college_list <- integer()
+
+# add total start-career salaries
 for (row in matching_rows) {
   salary <- data[row, "V3"]
+  eng_colleges <- data[row, "V1"]
+  college_start_salary <- c(college_start_salary, salary)
+  college_list <- c(college_list, eng_colleges)
   eng_total <- eng_total + salary
 }
 mean_eng_wage <- eng_total / eng_count
+college_list_ordered <- college_list[order(college_list)]
 print(mean_eng_wage)
+print(college_start_salary)
+print(college_list_ordered)
+
+# start career salary by engineering colleges
+data_start_career <- data.frame(
+  college = college_list_ordered,
+  salary = college_start_salary,
+  color = rep(c("darkgreen", "lightgreen"), length.out = length(college_list_ordered))
+) 
+#data_start_career <- data_start_career %>% arrange(college)
+
+print(data_start_career)
+
+ggplot(data_start_career, aes(x = college, y = salary, fill = color)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Starting Salaries by Engineering Colleges", x = "College Name", y = "Salary", fill = "") +
+  scale_y_continuous(limits = c(0, 90000), breaks = seq(0, 90000, by = 20000)) +
+  theme_minimal() +
+  scale_fill_manual(values = c("darkgreen", "lightgreen"), 
+                    labels = c("Salary")) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6))
 
 
 # liberal arts mean for starting career
