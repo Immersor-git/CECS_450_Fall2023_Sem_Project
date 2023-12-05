@@ -94,27 +94,6 @@ target_value <- ",Party"
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
 
-# count of liberal arts colleges
-party_count <- length(matching_rows)
-print(party_count)
-
-# add total mid-career salaries
-for (row in matching_rows) {
-  salary <- data[row, "V4"]
-  party_total <- party_total + salary
-}
-mean_party_wage <- party_total / party_count
-print(mean_party_wage)
-
-
-# party mean for mid career
-party_total <- 0
-column_name <- "V2"
-target_value <- ",Party"
-
-# find the row indices where the value occurs
-matching_rows <- which(data[[column_name]] == target_value)
-
 # count of party colleges
 party_count <- length(matching_rows)
 print(party_count)
@@ -199,8 +178,12 @@ for (row in matching_rows) {
 mean_ivy_wage <- ivy_total / ivy_count
 print(mean_ivy_wage)
 
-eng <- mean_eng_wage
-print(eng)
+print("Wages: Eng, Ivy, Liberal, Party, State")
+print(mean_eng_wage)
+print(mean_ivy_wage)
+print(mean_lib_wage)
+print(mean_party_wage)
+print(mean_state_wage)
 
 # Install and load necessary packages
 install.packages("ggplot2")
@@ -217,7 +200,7 @@ ggplot(data_mid_career, aes(x = college, y=salary, fill = color)) +
   theme(axis.text.x = element_text(size = 8), 
         axis.text.y = element_text(size = 10),
         legend.key.size = unit(0.3, "cm")) +
-  labs(title = "Mid-Career Median Salary by School Type", x = "College Type", y = "Salary") +
+  labs(title = "Mid-Career Mean Salary by School Type", x = "College Type", y = "Salary") +
   scale_fill_manual(values = c("blue", "darkgreen","red","purple", "orange"),
                     labels = c("Engineering", "State", "Liberal Arts", "Party", "Ivy League"))
 
