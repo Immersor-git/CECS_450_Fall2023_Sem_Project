@@ -42,6 +42,7 @@ for (row in matching_rows) {
 }
 mean_eng_wage <- eng_total / eng_count
 college_list_ordered <- college_list[order(college_list)]
+print("Engineering Wage: ")
 print(mean_eng_wage)
 print(college_start_salary)
 print(college_list_ordered)
@@ -69,7 +70,7 @@ ggplot(data_start_career, aes(x = college, y = salary, fill = color)) +
 # liberal arts mean for starting career
 lib_total <- 0
 column_name <- "V2"
-target_value <- ",Liberal Arts "
+target_value <- ",Liberal Arts"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -84,34 +85,14 @@ for (row in matching_rows) {
   lib_total <- lib_total + salary
 }
 mean_lib_wage <- lib_total / lib_count
+print("Liberal Wage: ")
 print(mean_lib_wage)
 
 
 # party mean for starting career
 party_total <- 0
 column_name <- "V2"
-target_value <- ",Party "
-
-# find the row indices where the value occurs
-matching_rows <- which(data[[column_name]] == target_value)
-
-# count of liberal arts colleges
-party_count <- length(matching_rows)
-print(party_count)
-
-# add total starting-career salaries
-for (row in matching_rows) {
-  salary <- data[row, "V3"]
-  party_total <- party_total + salary
-}
-mean_party_wage <- party_total / party_count
-print(mean_party_wage)
-
-
-# party mean for starting career
-party_total <- 0
-column_name <- "V2"
-target_value <- ",Party "
+target_value <- ",Party"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -126,6 +107,7 @@ for (row in matching_rows) {
   party_total <- party_total + salary
 }
 mean_party_wage <- party_total / party_count
+print("Party Wage: ")
 print(mean_party_wage)
 
 
@@ -154,9 +136,10 @@ for (row in matching_rows) {
 }
 mean_state_wage <- state_total / state_count
 college_list_ordered <- college_list[order(college_list)]
+print("State Wage: ")
 print(mean_state_wage)
 print(college_start_salary)
-print(college_list_ordered)
+print(college_list)
 
 # start career salary by engineering colleges
 data_start_career <- data.frame(
@@ -169,7 +152,7 @@ data_start_career <- data.frame(
 print(data_start_career)
 
 ggplot(data_start_career, aes(x = college, y = salary, fill = color)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = position_dodge(width = 10)) +
   labs(title = "Starting Salaries by State Colleges", x = "College Name", y = "Salary", fill = "") +
   scale_y_continuous(limits = c(0, 70000), breaks = seq(0, 70000, by = 10000)) +
   theme_minimal() +
@@ -186,7 +169,7 @@ ggplot(data_start_career, aes(x = college, y = salary, fill = color)) +
 # ivy league mean for starting career
 ivy_total <- 0
 column_name <- "V2"
-target_value <- ",Ivy League "
+target_value <- ",Ivy League"
 
 # find the row indices where the value occurs
 matching_rows <- which(data[[column_name]] == target_value)
@@ -201,6 +184,7 @@ for (row in matching_rows) {
   ivy_total <- ivy_total + salary
 }
 mean_ivy_wage <- ivy_total / ivy_count
+print("Ivy Wage: ")
 print(mean_ivy_wage)
 
 eng <- mean_eng_wage
@@ -217,6 +201,6 @@ ggplot(data_starting_career, aes(x = college, y=salary, fill = color)) +
   theme(axis.text.x = element_text(size = 8), 
         axis.text.y = element_text(size = 10),
         legend.key.size = unit(0.3, "cm")) +
-  labs(title = "Starting-Career Median Salary by School Type", x = "College Type", y = "Salary") +
+  labs(title = "Starting-Career Mean Salary by School Type", x = "College Type", y = "Salary") +
   scale_fill_manual(values = c("blue", "darkgreen","red","purple", "orange"),
                     labels = c("Engineering", "State", "Liberal Arts", "Party", "Ivy League"))
